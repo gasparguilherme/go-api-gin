@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"go-api/config"
 	"go-api/controller"
 	"go-api/usecase"
 
@@ -8,12 +10,11 @@ import (
 )
 
 func main() {
+	config.Load()
 	server := gin.Default()
 
-	ProductUsecase := usecase.NewProductUSecase()
-
-	//camada de controllers
-	ProductController := controller.NewProductController(ProductUsecase)
+	productUsecase := usecase.NewProductUSecase()
+	productController := controller.NewProductController(productUsecase)
 
 	server.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
@@ -21,8 +22,7 @@ func main() {
 		})
 	})
 
-	server.GET("/products", ProductController.GetProducts)
+	server.GET("/products", productController.GetProducts)
 
-	server.Run(":8000")
-
+	server.Run(fmt.Sprintf(":%d", config.APIPort))
 }
