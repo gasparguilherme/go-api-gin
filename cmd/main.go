@@ -1,15 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"go-api/config"
 	"go-api/controller"
+	"go-api/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	config.Load()
 	server := gin.Default()
 
-	ProductController := controller.NewProductController()
+	productUsecase := usecase.NewProductUSecase()
+	productController := controller.NewProductController(productUsecase)
 
 	server.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
@@ -17,8 +22,7 @@ func main() {
 		})
 	})
 
-	server.GET("/products", ProductController.GetProducts)
+	server.GET("/products", productController.GetProducts)
 
-	server.Run(":8000")
-
+	server.Run(fmt.Sprintf(":%d", config.APIPort))
 }
