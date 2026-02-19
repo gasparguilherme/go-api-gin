@@ -4,17 +4,32 @@ import (
 	"fmt"
 	"go-api/config"
 	"go-api/controller"
+	"go-api/db"
+	"go-api/repository"
 	"go-api/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	config.Load()
-	server := gin.Default()
 
-	productUsecase := usecase.NewProductUSecase()
-	productController := controller.NewProductController(productUsecase)
+	config.Load()
+
+	dbConnection, err := db.ConnectDB()
+	if err != nil {
+		panic(err)
+	}
+
+	//camada repository
+	ProductRepository := repository.NewProductRepository(dbConnection)
+
+	//camada usecase
+	ProductUsecase := usecase.NewProductUSecase(ProductRepository)
+
+	//camada controller
+	ProductController := controller.NewProductController(ProductUsecase)
+
+	server := gin.Default()
 
 	server.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
@@ -22,7 +37,7 @@ func main() {
 		})
 	})
 
-	server.GET("/products", productController.GetProducts)
+	server.GET("/products", ProductController.GetProducts)
 
 	server.Run(fmt.Sprintf(":%d", config.APIPort))
 }
