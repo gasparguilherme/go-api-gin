@@ -30,3 +30,11 @@ func (p *ProductUsecase) CreateProduct(product model.Product) (model.Product, er
 	product.ID = productID
 	return product, nil
 }
+
+func (p ProductUsecase) GetByID(id int) (*model.Product, error) {
+	product, err := p.repository.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	return product, nil
+}

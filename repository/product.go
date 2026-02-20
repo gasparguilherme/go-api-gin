@@ -54,3 +54,20 @@ func (p *ProductRepository) CreateProduct(product model.Product) (int, error) {
 
 	return id, nil
 }
+
+func (p *ProductRepository) GetByID(id int) (*model.Product, error) {
+	query := "SELECT id, name_product, price FROM products WHERE id = $1"
+
+	var product model.Product
+
+	err := p.connection.QueryRow(query, id).Scan(
+		&product.ID,
+		&product.Name,
+		&product.Price,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao buscar produto: %w", err)
+	}
+
+	return &product, nil
+}

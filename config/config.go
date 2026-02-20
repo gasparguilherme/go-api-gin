@@ -21,13 +21,11 @@ func Load() {
 		log.Fatal(err)
 	}
 
-	// Porta da API
 	APIPort, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
 		APIPort = 8000
 	}
 
-	// String de conexão com o banco
 	StringConnectionBase = fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
