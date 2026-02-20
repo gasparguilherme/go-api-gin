@@ -42,3 +42,15 @@ func (p *ProductRepository) GetProducts() ([]model.Product, error) {
 
 	return productList, nil
 }
+
+func (p *ProductRepository) CreateProduct(product model.Product) (int, error) {
+	query := `INSERT INTO products (name_product, price) VALUES ($1, $2) RETURNING id`
+
+	var id int
+	err := p.connection.QueryRow(query, product.Name, product.Price).Scan(&id)
+	if err != nil {
+		return 0, fmt.Errorf("erro ao criar produto: %w", err)
+	}
+
+	return id, nil
+}

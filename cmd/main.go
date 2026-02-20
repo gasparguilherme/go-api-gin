@@ -38,6 +38,11 @@ func main() {
 	})
 
 	server.GET("/products", ProductController.GetProducts)
+	server.POST("/product", ProductController.CreateProduct)
 
 	server.Run(fmt.Sprintf(":%d", config.APIPort))
+
+	server.Run(fmt.Sprintf(":%d", config.APIPort))
+	fmt.Println("Server running on port", config.APIPort)
+
 }
