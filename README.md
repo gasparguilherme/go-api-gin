@@ -30,4 +30,3 @@ Um projeto de exemplo em **Go**, demonstrando a criação de APIs RESTful com **
 
 ---
 
-## 📦 Estrutura do projeto

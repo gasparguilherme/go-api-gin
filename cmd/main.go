@@ -20,13 +20,10 @@ func main() {
 		panic(err)
 	}
 
-	//camada repository
 	ProductRepository := repository.NewProductRepository(dbConnection)
 
-	//camada usecase
 	ProductUsecase := usecase.NewProductUSecase(ProductRepository)
 
-	//camada controller
 	ProductController := controller.NewProductController(ProductUsecase)
 
 	server := gin.Default()
