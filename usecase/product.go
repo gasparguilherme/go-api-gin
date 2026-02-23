@@ -38,3 +38,11 @@ func (p ProductUsecase) GetByID(id int) (*model.Product, error) {
 	}
 	return product, nil
 }
+
+func (p ProductUsecase) DeleteProduct(id int) error {
+	err := p.repository.DeleteProduct(id)
+	if err != nil {
+		return fmt.Errorf("falha ao deletar produto %w", err)
+	}
+	return nil
+}
