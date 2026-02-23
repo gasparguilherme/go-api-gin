@@ -71,3 +71,12 @@ func (p *ProductRepository) GetByID(id int) (*model.Product, error) {
 
 	return &product, nil
 }
+
+func (p *ProductRepository) DeleteProduct(id int) error {
+	query := "DELETE FROM products WHERE id = $1"
+	_, err := p.connection.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("erro ao executar query de deleção")
+	}
+	return nil
+}

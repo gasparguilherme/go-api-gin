@@ -73,3 +73,25 @@ func (p ProductController) GetByID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, product)
 }
+
+func (p ProductController) DeleteProduct(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	if idParam == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID do produto não pode ser vazio"})
+		return
+	}
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID precisa ser um número"})
+		return
+	}
+
+	err = p.productUsecase.DeleteProduct(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil) // REST mais correto para DELETE
+}
